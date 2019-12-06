@@ -3,25 +3,23 @@ package ru.ronin52.marvel.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "comics")
 public class ComicsEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private UUID id;
     private String title;
     private String description;
-    private String image;
-    //TODO: подумать, про реализацию списка героев комикса
-    @ManyToMany
-    @JoinTable (name="character_comics",
-            joinColumns=@JoinColumn (name="comics_entity_id"),
-            inverseJoinColumns=@JoinColumn(name="character_entity_id"))
-    private List<CharacterEntity> characters;
+    @ManyToMany(mappedBy = "comics", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<CharacterEntity> characters;
 }

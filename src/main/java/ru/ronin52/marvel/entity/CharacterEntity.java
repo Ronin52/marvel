@@ -5,23 +5,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "characters")
 public class CharacterEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private UUID id;
     private String name;
     private String description;
-    private String image;
-    //TODO: Подумать про целесообразность хранения id комиксов с героем
-    @ManyToMany
-    @JoinTable (name="character_comics",
-            joinColumns=@JoinColumn (name="character_entity_id"),
-            inverseJoinColumns=@JoinColumn(name="comics_entity_id"))
-    private List<ComicsEntity> comics;
+    @ManyToMany()
+    @JoinTable(name = "character_comics",
+            joinColumns = @JoinColumn(name = "character_id"),
+            inverseJoinColumns = @JoinColumn(name = "comics_id"))
+    private Set<ComicsEntity> comics;
 }

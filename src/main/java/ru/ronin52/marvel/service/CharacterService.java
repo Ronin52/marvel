@@ -10,7 +10,9 @@ import ru.ronin52.marvel.repository.CharacterRepository;
 public class CharacterService {
     private final CharacterRepository repository;
 
-    public void save(){
-        repository.save(new CharacterEntity(0,"","","",null));
+    public CharacterEntity save(CharacterEntity entity){
+        return repository.save(entity);
     }
+
+
 }

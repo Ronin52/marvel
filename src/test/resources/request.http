@@ -1,3 +1,13 @@
-GET http://localhost:9999/
+POST http://localhost:9999/api/file/upload
+Content-Type: multipart/form-data; boundary=WebApp
+
+--WebApp
+Content-Disposition: form-data; name="file"; filename="panda.jpg"
+Content-Type: image/jpeg
+
+< L:\Download\test1.jpg
+--WebApp--
+###
+GET http://localhost:9999/api/file/affa2a19-e786-4298-964d-a0089ca4cdc1.jpg
 
 ###

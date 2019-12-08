@@ -11,6 +11,6 @@ Content-Type: image/jpeg
 GET http://localhost:9999/api/file/affa2a19-e786-4298-964d-a0089ca4cdc1.jpg
 
 ###
-GET http://localhost:9999/
+GET http://localhost:9999/ertyu
 
 ###

@@ -1,7 +1,9 @@
 package ru.ronin52.marvel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode(exclude = "characters")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -23,6 +26,7 @@ public class ComicsEntity {
     private String description;
     private String image;
     @ManyToMany(mappedBy = "comics")
+    @JsonIgnore
     private Set<CharacterEntity> characters;
     @Override
     public String toString() {

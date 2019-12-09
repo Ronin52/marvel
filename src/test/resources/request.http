@@ -7,10 +7,18 @@ Content-Type: image/jpeg
 
 < L:\Download\test1.jpg
 --WebApp--
+
 ###
 GET http://localhost:9999/api/file/affa2a19-e786-4298-964d-a0089ca4cdc1.jpg
 
 ###
-GET http://localhost:9999/ertyu
+GET http://localhost:9999/test/character
 
 ###
+GET http://localhost:9999/test/comics
+
+###
+GET http://localhost:9999/test/allcharacters
+
+###
+GET http://localhost:9999/test/allcomics

@@ -1,13 +1,14 @@
 package ru.ronin52.marvel.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ru.ronin52.marvel.dto.CharacterSaveDto;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 @Data
@@ -23,11 +24,21 @@ public class CharacterEntity {
     private String description;
     private String image;
     @ManyToMany()
-    @JsonIgnore
     @JoinTable(name = "character_comics",
             joinColumns = @JoinColumn(name = "character_id"),
             inverseJoinColumns = @JoinColumn(name = "comics_id"))
-    private Set<ComicsEntity> comics;
+    private Collection<ComicsEntity> comics;
+
+    public static CharacterEntity from(CharacterSaveDto dto) {
+        return new CharacterEntity(
+                UUID.randomUUID(),
+                dto.getName(),
+                dto.getDescription(),
+                dto.getImage(),
+                Collections.emptyList()
+        );
+    }
+
     @Override
     public String toString() {
         return "CharacterEntity{" +
@@ -38,7 +49,7 @@ public class CharacterEntity {
                 "}";
     }
 
-    private String comicsTostring(Set<ComicsEntity> comics) {
+    private String comicsTostring(Collection<ComicsEntity> comics) {
         final StringBuilder builder = new StringBuilder();
         for (ComicsEntity comicsEntity : comics) {
             builder.append("{id=")

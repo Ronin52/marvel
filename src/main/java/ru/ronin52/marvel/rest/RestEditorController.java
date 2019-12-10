@@ -15,6 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/editor")
 public class RestEditorController {
+    //TODO: сделать валидацию, проработать эксепшены
     private final CharacterService characterService;
     private final ComicsService comicsService;
     private final RelationService relationService;

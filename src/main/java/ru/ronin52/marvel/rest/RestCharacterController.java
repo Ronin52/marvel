@@ -2,49 +2,35 @@ package ru.ronin52.marvel.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ronin52.marvel.dto.*;
+import ru.ronin52.marvel.dto.CharacterDto;
+import ru.ronin52.marvel.dto.CharacterDtoWithComics;
 import ru.ronin52.marvel.service.CharacterService;
-import ru.ronin52.marvel.service.ComicsService;
-import ru.ronin52.marvel.service.RelationService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/test")
+@RequestMapping("/characters")
 public class RestCharacterController {
     private final CharacterService characterService;
-    private final ComicsService comicsService;
-    private final RelationService relationService;
 
-    @GetMapping("/character")
-    public CharacterDtoWithComics characters(){
-        CharacterDto characterDto = characterService.save(new CharacterSaveDto("America 1", "", ""));
-        ComicsDto comicsDto1 = comicsService.save(new ComicsSaveDto("Infinity War", "", ""));
-        ComicsDto comicsDto2 = comicsService.save(new ComicsSaveDto("Infinity War 2", "", ""));
-        relationService.BindCharacterAndComicsById(characterDto.getId(),comicsDto1.getId());
-        relationService.BindCharacterAndComicsById(characterDto.getId(),comicsDto2.getId());
-        return characterService.getCharacterByIdWithComics(characterDto.getId());
-    }
-    @GetMapping("/comics")
-    public ComicsDtoWithCharacters comics(){
-        CharacterDto characterDto1 = characterService.save(new CharacterSaveDto("America 2", "", ""));
-        CharacterDto characterDto2 = characterService.save(new CharacterSaveDto("America 3", "", ""));
-        ComicsDto comicsDto = comicsService.save(new ComicsSaveDto("Infinity War 3", "", ""));
-        relationService.BindCharacterAndComicsById(characterDto1.getId(),comicsDto.getId());
-        relationService.BindCharacterAndComicsById(characterDto2.getId(),comicsDto.getId());
-        return comicsService.getComicsByIdWithCharacters(comicsDto.getId());
-    }
-
-    @GetMapping("/allcharacters")
-    public List<CharacterDto> getAllCharacters(){
+    @GetMapping
+    public List<CharacterDto> getAll(){
         return characterService.getAll();
     }
 
-    @GetMapping("allcomics")
-    public List<ComicsDto> getAllComics() {
-        return comicsService.getAll();
+    @GetMapping("/{id}")
+    public CharacterDto getById(@PathVariable UUID id) {
+        return characterService.getByIdWithoutComics(id);
     }
+
+    @GetMapping("/{id}/comics")
+    public CharacterDtoWithComics getComics(@PathVariable UUID id) {
+        return characterService.getByIdWithComics(id);
+    }
+
 }

@@ -22,11 +22,11 @@ public class ComicsService {
         return ComicsDto.from(repository.save(ComicsEntity.from(dto)));
     }
 
-    public ComicsDto getComicsByIdWithoutCharacters(UUID id) {
+    public ComicsDto getByIdWithoutCharacters(UUID id) {
         return ComicsDto.from(repository.findById(id).orElseThrow(ComicsNotFoundException::new));
     }
 
-    public ComicsDtoWithCharacters getComicsByIdWithCharacters(UUID id) {
+    public ComicsDtoWithCharacters getByIdWithCharacters(UUID id) {
         return ComicsDtoWithCharacters.from(repository.findById(id).orElseThrow(ComicsNotFoundException::new));
     }
 
@@ -34,5 +34,9 @@ public class ComicsService {
         return repository.findAll().stream()
                 .map(ComicsDto::from)
                 .collect(Collectors.toList());
+    }
+
+    public void removeById(UUID id) {
+        repository.deleteById(id);
     }
 }

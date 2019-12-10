@@ -1,24 +1,43 @@
-POST http://localhost:9999/api/file/upload
-Content-Type: multipart/form-data; boundary=WebApp
+###
+POST http://localhost:9999/editor/save/character
+Content-Type:application/json
 
---WebApp
-Content-Disposition: form-data; name="file"; filename="panda.jpg"
-Content-Type: image/jpeg
-
-< L:\Download\test1.jpg
---WebApp--
+{
+  "name": "",
+  "description": "",
+  "image": ""
+}
 
 ###
-GET http://localhost:9999/api/file/affa2a19-e786-4298-964d-a0089ca4cdc1.jpg
+POST http://localhost:9999/editor/save/comics
+Content-Type:application/json
+
+{
+  "title": "",
+  "description": "",
+  "image": ""
+}
 
 ###
-GET http://localhost:9999/test/character
+GET http://localhost:9999/characters/05841a81-b546-4113-a9e7-5054ffce0cdf/comics
 
 ###
-GET http://localhost:9999/test/comics
+#05841a81-b546-4113-a9e7-5054ffce0cdf
+#a44cb47c-5c83-4662-b322-53e9de7cb8c2
+
+GET http://localhost:9999/comics
 
 ###
-GET http://localhost:9999/test/allcharacters
+POST http://localhost:9999/editor/bind/character/05841a81-b546-4113-a9e7-5054ffce0cdf
+Content-Type:application/json
+
+[
+  {
+    "id": "6c99d5b0-9430-46ef-8f6f-3753a76e2a61",
+    "title": "Infinity War 2",
+    "description": "",
+    "image": ""
+  }
+]
 
 ###
-GET http://localhost:9999/test/allcomics

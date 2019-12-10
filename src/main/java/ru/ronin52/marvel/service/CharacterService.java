@@ -22,12 +22,12 @@ public class CharacterService {
         return CharacterDto.from(repository.save(CharacterEntity.from(dto)));
     }
 
-    public CharacterDto getCharacterByIdWithoutComics(UUID id) {
+    public CharacterDto getByIdWithoutComics(UUID id) {
         return CharacterDto.from(repository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new));
     }
 
-    public CharacterDtoWithComics getCharacterByIdWithComics(UUID id) {
+    public CharacterDtoWithComics getByIdWithComics(UUID id) {
         return CharacterDtoWithComics.from(repository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new));
     }
@@ -38,6 +38,9 @@ public class CharacterService {
                 .collect(Collectors.toList());
     }
 
+    public void removeById(UUID id) {
+        repository.deleteById(id);
+    }
 
 
 

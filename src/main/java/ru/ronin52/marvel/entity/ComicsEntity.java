@@ -39,26 +39,4 @@ public class ComicsEntity {
                 Collections.emptyList()
         );
     }
-
-    @Override
-    public String toString() {
-        return "CharacterEntity{" +
-                "id=" + id +
-                ", title='" + title + "'" +
-                ", description='" + description + "'" +
-                ", characters=[" + characterToString(characters) +"]" +
-                "}";
-    }
-
-    private String characterToString(Collection<CharacterEntity> characters) {
-        final StringBuilder builder = new StringBuilder();
-        for (CharacterEntity characterEntity : characters) {
-            builder.append("{id=")
-                    .append(characterEntity.getId())
-                    .append(", name=")
-                    .append(characterEntity.getName())
-                    .append("}");
-        }
-        return builder.toString();
-    }
 }

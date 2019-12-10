@@ -18,7 +18,7 @@ public class RelationService {
     private final CharacterRepository characterRepository;
     private final ComicsRepository comicsRepository;
 
-    public void BindCharacterAndComicsById(UUID characterId, UUID comicsId) {
+    public void bindCharacterAndComicsById(UUID characterId, UUID comicsId) {
         CharacterEntity character = characterRepository.findById(characterId).orElseThrow(CharacterNotFoundException::new);
         ComicsEntity comicsEntity = comicsRepository.findById(comicsId).orElseThrow(ComicsNotFoundException::new);
 

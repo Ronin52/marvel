@@ -20,6 +20,7 @@ import java.util.UUID;
 public class CharacterEntity {
     @Id
     private UUID id;
+
     private String name;
     private String description;
     private String image;
@@ -37,27 +38,5 @@ public class CharacterEntity {
                 dto.getImage(),
                 Collections.emptyList()
         );
-    }
-
-    @Override
-    public String toString() {
-        return "CharacterEntity{" +
-                "id=" + id +
-                ", name='" + name + "'" +
-                ", description='" + description + "'" +
-                ", comics=[" + comicsTostring(comics) +"]" +
-                "}";
-    }
-
-    private String comicsTostring(Collection<ComicsEntity> comics) {
-        final StringBuilder builder = new StringBuilder();
-        for (ComicsEntity comicsEntity : comics) {
-            builder.append("{id=")
-                    .append(comicsEntity.getId())
-                    .append(", title=")
-                    .append(comicsEntity.getTitle())
-                    .append("}");
-        }
-        return builder.toString();
     }
 }

@@ -19,25 +19,32 @@ Content-Type:application/json
 }
 
 ###
-GET http://localhost:9999/characters/05841a81-b546-4113-a9e7-5054ffce0cdf/comics
+GET http://localhost:9999/characters/84bcff5e-2899-49a9-9190-7b018d861282/comics
 
 ###
-#05841a81-b546-4113-a9e7-5054ffce0cdf
-#a44cb47c-5c83-4662-b322-53e9de7cb8c2
 
 GET http://localhost:9999/comics
 
 ###
-POST http://localhost:9999/editor/bind/character/05841a81-b546-4113-a9e7-5054ffce0cdf
+POST http://localhost:9999/editor/bind/character/84bcff5e-2899-49a9-9190-7b018d861282
 Content-Type:application/json
 
 [
   {
-    "id": "6c99d5b0-9430-46ef-8f6f-3753a76e2a61",
-    "title": "Infinity War 2",
+    "id": "f3b01035-f3ec-4740-bdd8-8e086ea2e239",
+    "title": "",
+    "description": "",
+    "image": ""
+  },
+  {
+    "id": "791e0f8d-075c-422f-bba1-ab5c024fac55",
+    "title": "",
     "description": "",
     "image": ""
   }
 ]
+
+###
+DELETE http://localhost:9999/editor/remove/comics/f3b01035-f3ec-4740-bdd8-8e086ea2e239
 
 ###

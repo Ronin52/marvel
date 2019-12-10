@@ -12,7 +12,7 @@ import ru.ronin52.marvel.service.FileService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/file")
+@RequestMapping("/file")
 public class RestFileController {
     private final FileService service;
 

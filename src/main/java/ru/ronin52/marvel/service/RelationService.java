@@ -18,19 +18,26 @@ public class RelationService {
     private final CharacterRepository characterRepository;
     private final ComicsRepository comicsRepository;
 
-    public void bindCharacterAndComicsById(UUID characterId, UUID comicsId) {
-        CharacterEntity character = characterRepository.findById(characterId).orElseThrow(CharacterNotFoundException::new);
+    public boolean bindCharacterAndComicsById(UUID characterId, UUID comicsId) {
+        CharacterEntity characterEntity = characterRepository.findById(characterId).orElseThrow(CharacterNotFoundException::new);
         ComicsEntity comicsEntity = comicsRepository.findById(comicsId).orElseThrow(ComicsNotFoundException::new);
 
-        Collection<ComicsEntity> comics = character.getComics();
+        Collection<ComicsEntity> comics = characterEntity.getComics();
+        if(comics.contains(comicsEntity)){
+            return false;
+        }
         comics.add(comicsEntity);
-        character.setComics(comics);
+        characterEntity.setComics(comics);
 
         Collection<CharacterEntity> characters = comicsEntity.getCharacters();
-        characters.add(character);
+        if(characters.contains(characterEntity)){
+            return false;
+        }
+        characters.add(characterEntity);
         comicsEntity.setCharacters(characters);
 
-        characterRepository.save(character);
+        characterRepository.save(characterEntity);
         comicsRepository.save(comicsEntity);
+        return true;
     }
 }

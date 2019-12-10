@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import ru.ronin52.marvel.dto.ErrorResponseDto;
+import ru.ronin52.marvel.exception.CharacterNotFoundException;
+import ru.ronin52.marvel.exception.ComicsNotFoundException;
 import ru.ronin52.marvel.exception.FileStorageException;
 import ru.ronin52.marvel.exception.UnsupportedFileTypeException;
 
@@ -32,27 +34,34 @@ public class RestErrorController extends AbstractErrorController {
         Throwable error = errorAttributes.getError(webRequest);
         int status = getStatus(request).value();
         String message = "error.unknown";
-        if (status == 404) {
-            message = "error.not_found";
-        }
         if (error == null) {
             return ResponseEntity.status(status).body(
                     new ErrorResponseDto(status, message)
             );
         }
+        if (error instanceof CharacterNotFoundException) {
+            status = 404;
+            message = "error.character.not_found";
+            return getErrorDto(error, status, message);
+        }
+        if (error instanceof ComicsNotFoundException) {
+            status = 404;
+            message = "error.comics.not_found";
+            return getErrorDto(error, status, message);
+        }
         if (error instanceof FileNotFoundException) {
             status = 404;
-            message = "error.file_not_found";
+            message = "error.file.not_found";
             return getErrorDto(error, status, message);
         }
         if (error instanceof FileStorageException) {
             status = 400;
-            message = "error.can_not_save_file";
+            message = "error.file.can_not_save";
             return getErrorDto(error, status, message);
         }
         if (error instanceof UnsupportedFileTypeException) {
             status = 400;
-            message = "error.bad_filetype";
+            message = "error.file.bad_type";
             return getErrorDto(error, status, message);
         }
         return getErrorDto(error, status, message);

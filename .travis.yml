@@ -1,0 +1,7 @@
+language: java
+jdk: oraclejdk11
+
+deploy:
+  provider: heroku
+  api_key: $HEROKU_KEY
+  app: socialnetwork-backend

@@ -11,17 +11,20 @@ import ru.ronin52.marvel.service.RelationService;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/characters")
 public class RestCharacterController {
-    private final EntityService<CharacterDto, CharacterDtoWithComics, CharacterSaveDto> characterService;
+    private final EntityService<CharacterDto, CharacterDtoWithComics, CharacterSaveDto> service;
     private final RelationService relationService;
+    private int elementsOnPage = 5;
 
     @PostMapping("/save")
     public CharacterDto save(@RequestBody CharacterSaveDto dto) {
-        return characterService.save(dto);
+        return service.save(dto);
     }
 
     @PostMapping("/bind/{characterId}")
@@ -33,22 +36,44 @@ public class RestCharacterController {
 
     @GetMapping
     public List<CharacterDto> getAll() {
-        return characterService.getAll();
+        return service.getAll();
+    }
+
+    @GetMapping(params = {"page", "count"})
+    public List<CharacterDto> getPage(@RequestParam int page, @RequestParam int count) {
+        return service.getPage(page, count);
+    }
+
+    @GetMapping(params = "name")
+    public List<CharacterDto> searchByName(@RequestParam String name) {
+        return service.findByName(name);
+    }
+
+    @GetMapping(params = "description")
+    public List<CharacterDto> searchByDescription(@RequestParam String description) {
+        return service.findByDescription(description);
+    }
+
+    @GetMapping(params = {"name", "description"})
+    public List<CharacterDto> searchByNameAndDescription(@RequestParam String name, @RequestParam String description) {
+        return Stream.concat(service.findByName(name).stream(), service.findByDescription(description).stream())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public CharacterDto getById(@PathVariable UUID id) {
-        return characterService.getByIdWithoutCollection(id);
+        return service.getByIdWithoutCollection(id);
     }
 
     @GetMapping("/{id}/comics")
     public CharacterDtoWithComics getComics(@PathVariable UUID id) {
-        return characterService.getByIdWithCollection(id);
+        return service.getByIdWithCollection(id);
     }
 
     @DeleteMapping("/remove/{id}")
     public void removeById(@PathVariable UUID id) {
-        characterService.removeById(id);
+        service.removeById(id);
     }
 
 }

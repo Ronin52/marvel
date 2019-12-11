@@ -18,26 +18,52 @@ import java.util.stream.Collectors;
 public class CharacterServiceImpl implements EntityService<CharacterDto, CharacterDtoWithComics, CharacterSaveDto> {
     private final CharacterRepository repository;
 
+    @Override
     public CharacterDto save(CharacterSaveDto dto) {
         return CharacterDto.from(repository.save(CharacterEntity.from(dto)));
     }
 
+    @Override
+    public List<CharacterDto> getPage(int page, int count) {
+        return repository.getPage(page, count).stream()
+                .map(CharacterDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CharacterDto> findByName(String q) {
+        return repository.findAllByNameLikeIgnoreCase(q).stream()
+                .map(CharacterDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CharacterDto> findByDescription(String q) {
+        return repository.findAllByDescriptionLikeIgnoreCase(q).stream()
+                .map(CharacterDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public CharacterDto getByIdWithoutCollection(UUID id) {
         return CharacterDto.from(repository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new));
     }
 
+    @Override
     public CharacterDtoWithComics getByIdWithCollection(UUID id) {
         return CharacterDtoWithComics.from(repository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new));
     }
 
+    @Override
     public List<CharacterDto> getAll() {
         return repository.findAll().stream()
                 .map(CharacterDto::from)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void removeById(UUID id) {
         repository.deleteById(id);
     }

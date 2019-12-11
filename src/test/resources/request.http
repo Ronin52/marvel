@@ -3,8 +3,8 @@ POST http://localhost:9999/characters/save
 Content-Type:application/json
 
 {
-  "name": "",
-  "description": "",
+  "name": "one",
+  "description": "one",
   "image": ""
 }
 
@@ -19,7 +19,7 @@ Content-Type:application/json
 }
 
 ###
-GET http://localhost:9999/characters
+GET http://localhost:9999/characters?page=2&count=5
 
 ###
 

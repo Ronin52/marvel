@@ -15,18 +15,18 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ComicsService {
+public class ComicsServiceImpl implements EntityService<ComicsDto, ComicsDtoWithCharacters, ComicsSaveDto> {
     private final ComicsRepository repository;
 
     public ComicsDto save(ComicsSaveDto dto) {
         return ComicsDto.from(repository.save(ComicsEntity.from(dto)));
     }
 
-    public ComicsDto getByIdWithoutCharacters(UUID id) {
+    public ComicsDto getByIdWithoutCollection(UUID id) {
         return ComicsDto.from(repository.findById(id).orElseThrow(ComicsNotFoundException::new));
     }
 
-    public ComicsDtoWithCharacters getByIdWithCharacters(UUID id) {
+    public ComicsDtoWithCharacters getByIdWithCollection(UUID id) {
         return ComicsDtoWithCharacters.from(repository.findById(id).orElseThrow(ComicsNotFoundException::new));
     }
 

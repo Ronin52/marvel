@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CharacterService {
+public class CharacterServiceImpl implements EntityService<CharacterDto, CharacterDtoWithComics, CharacterSaveDto> {
     private final CharacterRepository repository;
 
     public CharacterDto save(CharacterSaveDto dto) {
         return CharacterDto.from(repository.save(CharacterEntity.from(dto)));
     }
 
-    public CharacterDto getByIdWithoutComics(UUID id) {
+    public CharacterDto getByIdWithoutCollection(UUID id) {
         return CharacterDto.from(repository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new));
     }
 
-    public CharacterDtoWithComics getByIdWithComics(UUID id) {
+    public CharacterDtoWithComics getByIdWithCollection(UUID id) {
         return CharacterDtoWithComics.from(repository.findById(id)
                 .orElseThrow(CharacterNotFoundException::new));
     }
@@ -41,7 +41,6 @@ public class CharacterService {
     public void removeById(UUID id) {
         repository.deleteById(id);
     }
-
 
 
 }

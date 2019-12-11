@@ -1,5 +1,5 @@
 ###
-POST http://localhost:9999/editor/save/character
+POST http://localhost:9999/characters/save
 Content-Type:application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type:application/json
 }
 
 ###
-POST http://localhost:9999/editor/save/comics
+POST http://localhost:9999/comics/save
 Content-Type:application/json
 
 {
@@ -19,14 +19,14 @@ Content-Type:application/json
 }
 
 ###
-GET http://localhost:9999/characters/84bcff5e-2899-49a9-9190-7b018d861282/comics
+GET http://localhost:9999/characters
 
 ###
 
 GET http://localhost:9999/comics
 
 ###
-POST http://localhost:9999/editor/bind/character/84bcff5e-2899-49a9-9190-7b018d861282
+POST http://localhost:9999/characters/bind/84bcff5e-2899-49a9-9190-7b018d861282
 Content-Type:application/json
 
 [
@@ -45,6 +45,6 @@ Content-Type:application/json
 ]
 
 ###
-DELETE http://localhost:9999/editor/remove/comics/f3b01035-f3ec-4740-bdd8-8e086ea2e239
+DELETE http://localhost:9999/comics/remove/f3b01035-f3ec-4740-bdd8-8e086ea2e239
 
 ###

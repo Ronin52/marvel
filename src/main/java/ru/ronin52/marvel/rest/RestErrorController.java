@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import ru.ronin52.marvel.dto.ErrorResponseDto;
-import ru.ronin52.marvel.exception.CharacterNotFoundException;
-import ru.ronin52.marvel.exception.ComicsNotFoundException;
-import ru.ronin52.marvel.exception.FileStorageException;
-import ru.ronin52.marvel.exception.UnsupportedFileTypeException;
+import ru.ronin52.marvel.exception.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
@@ -64,6 +61,12 @@ public class RestErrorController extends AbstractErrorController {
             message = "error.file.bad_type";
             return getErrorDto(error, status, message);
         }
+        if (error instanceof ContentTypeIsNullException){
+            status = 400;
+            message = "error.header.content_type_is_null";
+            return getErrorDto(error, status, message);
+        }
+
         return getErrorDto(error, status, message);
     }
 

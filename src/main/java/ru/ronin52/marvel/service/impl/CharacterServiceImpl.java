@@ -1,4 +1,4 @@
-package ru.ronin52.marvel.service;
+package ru.ronin52.marvel.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,8 @@ import ru.ronin52.marvel.dto.ComicsDto;
 import ru.ronin52.marvel.entity.CharacterEntity;
 import ru.ronin52.marvel.exception.CharacterNotFoundException;
 import ru.ronin52.marvel.repository.CharacterRepository;
+import ru.ronin52.marvel.service.EntityService;
+import ru.ronin52.marvel.service.RelationService;
 
 import java.util.List;
 import java.util.UUID;

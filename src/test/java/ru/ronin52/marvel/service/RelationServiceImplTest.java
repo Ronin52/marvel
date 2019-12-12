@@ -8,6 +8,7 @@ import ru.ronin52.marvel.exception.CharacterNotFoundException;
 import ru.ronin52.marvel.exception.ComicsNotFoundException;
 import ru.ronin52.marvel.repository.CharacterRepository;
 import ru.ronin52.marvel.repository.ComicsRepository;
+import ru.ronin52.marvel.service.impl.RelationServiceImpl;
 
 import java.util.Collection;
 import java.util.Optional;

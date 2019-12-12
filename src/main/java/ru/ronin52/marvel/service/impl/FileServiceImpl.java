@@ -1,15 +1,15 @@
-package ru.ronin52.marvel.service;
+package ru.ronin52.marvel.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ronin52.marvel.domain.UploadInfo;
 import ru.ronin52.marvel.dto.UploadResponseDto;
+import ru.ronin52.marvel.exception.ContentTypeIsNullException;
 import ru.ronin52.marvel.exception.FileStorageException;
 import ru.ronin52.marvel.exception.UnsupportedFileTypeException;
+import ru.ronin52.marvel.service.FileService;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -20,11 +20,16 @@ import java.util.UUID;
 
 @Service
 public class FileServiceImpl implements FileService {
-    private final static Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
     private final String uploadPath;
 
+    private static final String FILE_CONTENT_TYPE_JPEG = "image/jpeg";
+    private static final String FILE_CONTENT_TYPE_PNG = "image/png";
+
+    private static final String EXTENSION_JPEG = ".jpg";
+    private static final String EXTENSION_PNG = ".png";
+
+
     public FileServiceImpl(@Value("${app.upload-path}") String uploadPath) {
-        logger.info(uploadPath);
         this.uploadPath = uploadPath;
     }
 
@@ -37,17 +42,21 @@ public class FileServiceImpl implements FileService {
     }
 
     public UploadResponseDto save(MultipartFile multipartFile) {
-        String extension;
+        final String name;
         String contentType = multipartFile.getContentType();
-        if ("image/jpeg".equals(contentType)) {
-            extension = ".jpg";
-        } else if ("image/png".equals(contentType)) {
-            extension = ".png";
-        } else {
-            throw new UnsupportedFileTypeException(contentType);
+        if (contentType == null) {
+            throw new ContentTypeIsNullException();
         }
-
-        String name = UUID.randomUUID() + extension;
+        switch (contentType) {
+            case FILE_CONTENT_TYPE_JPEG:
+                name = UUID.randomUUID() + EXTENSION_JPEG;
+                break;
+            case FILE_CONTENT_TYPE_PNG:
+                name = UUID.randomUUID() + EXTENSION_PNG;
+                break;
+            default:
+                throw new UnsupportedFileTypeException(contentType);
+        }
         try {
             multipartFile.transferTo(Paths.get(uploadPath).resolve(name));
             return new UploadResponseDto(name);

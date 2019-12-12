@@ -8,8 +8,9 @@ import ru.ronin52.marvel.dto.ComicsDtoWithCharacters;
 import ru.ronin52.marvel.entity.ComicsEntity;
 import ru.ronin52.marvel.exception.ComicsNotFoundException;
 import ru.ronin52.marvel.repository.ComicsRepository;
+import ru.ronin52.marvel.service.impl.ComicsServiceImpl;
+import ru.ronin52.marvel.service.impl.RelationServiceImpl;
 
-import java.awt.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,11 +56,10 @@ class ComicsServiceImplTest {
         entity.setId(id);
         entity.setCharacters(Collections.emptyList());
 
-        ArrayList<CharacterDto> characterDtoArrayList = new ArrayList<>();
-        characterDtoArrayList.add(new CharacterDto());
+        List<CharacterDto> characterDtos = List.of(new CharacterDto());
 
         ComicsDtoWithCharacters dto = new ComicsDtoWithCharacters();
-        dto.setCharacters(characterDtoArrayList);
+        dto.setCharacters(characterDtos);
 
         when(repository.save(any(ComicsEntity.class)))
                 .thenReturn(entity);

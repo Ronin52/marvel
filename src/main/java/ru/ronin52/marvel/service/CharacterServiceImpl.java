@@ -31,15 +31,22 @@ public class CharacterServiceImpl implements EntityService<CharacterDto, Charact
     }
 
     @Override
+    public List<CharacterDto> getSortedByName() {
+        return repository.getSortedByName().stream()
+                .map(CharacterDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<CharacterDto> findByName(String q) {
-        return repository.findAllByNameLikeIgnoreCase(q).stream()
+        return repository.findAllByNameContainsIgnoreCase(q).stream()
                 .map(CharacterDto::from)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CharacterDto> findByDescription(String q) {
-        return repository.findAllByDescriptionLikeIgnoreCase(q).stream()
+        return repository.findAllByDescriptionContainsIgnoreCase(q).stream()
                 .map(CharacterDto::from)
                 .collect(Collectors.toList());
     }

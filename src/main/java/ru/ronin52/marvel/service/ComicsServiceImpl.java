@@ -2,7 +2,6 @@ package ru.ronin52.marvel.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.ronin52.marvel.dto.CharacterDto;
 import ru.ronin52.marvel.dto.ComicsDto;
 import ru.ronin52.marvel.dto.ComicsDtoWithCharacters;
 import ru.ronin52.marvel.dto.ComicsSaveDto;
@@ -26,7 +25,7 @@ public class ComicsServiceImpl implements EntityService<ComicsDto, ComicsDtoWith
 
     @Override
     public List<ComicsDto> findByName(String q) {
-        return repository.findAllByTitleLikeIgnoreCase(q).stream()
+        return repository.findAllByTitleContainsIgnoreCase(q).stream()
                 .map(ComicsDto::from)
                 .collect(Collectors.toList());
     }
@@ -39,8 +38,15 @@ public class ComicsServiceImpl implements EntityService<ComicsDto, ComicsDtoWith
     }
 
     @Override
+    public List<ComicsDto> getSortedByName() {
+        return repository.getSortedByName().stream()
+                .map(ComicsDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ComicsDto> findByDescription(String q) {
-        return repository.findAllByDescriptionLikeIgnoreCase(q).stream()
+        return repository.findAllByDescriptionContainsIgnoreCase(q).stream()
                 .map(ComicsDto::from)
                 .collect(Collectors.toList());
     }

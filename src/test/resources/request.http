@@ -3,8 +3,8 @@ POST http://localhost:9999/characters/save
 Content-Type:application/json
 
 {
-  "name": "one",
-  "description": "one",
+  "name": "three",
+  "description": "cast",
   "image": ""
 }
 
@@ -19,11 +19,13 @@ Content-Type:application/json
 }
 
 ###
-GET http://localhost:9999/characters?page=2&count=5
+GET http://localhost:9999/characters/search?name=&description=a
 
 ###
+GET http://localhost:9999/characters/:3364df8b-3cc5-4ecf-ace0-e9725d970481/comics
+###
 
-GET http://localhost:9999/comics
+GET http://localhost:9999/characters?page=1&count=1
 
 ###
 POST http://localhost:9999/characters/bind/84bcff5e-2899-49a9-9190-7b018d861282

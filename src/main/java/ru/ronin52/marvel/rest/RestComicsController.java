@@ -1,6 +1,7 @@
 package ru.ronin52.marvel.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.ronin52.marvel.dto.CharacterDto;
 import ru.ronin52.marvel.dto.ComicsDto;
@@ -20,14 +21,15 @@ import java.util.stream.Stream;
 public class RestComicsController {
     private final EntityService<ComicsDto, ComicsDtoWithCharacters, ComicsSaveDto> service;
     private final RelationService relationService;
-    private int elementsOnPage = 5;
 
     @PostMapping("/save/comics")
+    @ResponseStatus(HttpStatus.CREATED)
     public ComicsDto save(@RequestBody ComicsSaveDto dto) {
         return service.save(dto);
     }
 
-    @PostMapping("/bind/{comicsId}")
+    @PostMapping("/bind/:{comicsId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void bindCharacters(@PathVariable UUID comicsId, @RequestBody List<CharacterDto> dtoList) {
         for (CharacterDto dto : dtoList) {
             relationService.bindCharacterAndComicsById(dto.getId(), comicsId);
@@ -39,39 +41,47 @@ public class RestComicsController {
         return service.getAll();
     }
 
-    @GetMapping(params = {"page", "count"})
-    public List<ComicsDto> getPage(@RequestParam int page, @RequestParam int count) {
-        return service.getPage(page, count);
+    @GetMapping(value = "/page", params = {"p", "count"})
+    public List<ComicsDto> getPage(@RequestParam int p, @RequestParam int count) {
+        return service.getPage(p, count);
     }
 
-    @GetMapping(params = "title")
-    public List<ComicsDto> searchByTitle(@RequestParam String title) {
-        return service.findByName(title);
+    @GetMapping(value = "/filter", params = "f")
+    public List<ComicsDto> getSortedByName(@RequestParam String f) {
+        if (f.equals("title")) {
+            return service.getSortedByName();
+        }
+        return service.getAll();
     }
 
-    @GetMapping(params = "description")
-    public List<ComicsDto> searchByDescription(@RequestParam String description) {
-        return service.findByDescription(description);
+    @GetMapping(value = "/search", params = {"field", "name", "description"})
+    public List<ComicsDto> searchByTitleAndDescription(@RequestParam String field, @RequestParam String title, @RequestParam String description) {
+        if (field.equals("title")) {
+            return service.findByName(title);
+        }
+        if (field.equals("description")) {
+            return service.findByDescription(description);
+        }
+        if (field.equals("all")) {
+            return Stream.concat(service.findByName(title).stream(), service.findByDescription(description).stream())
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+        return service.getAll();
     }
 
-    @GetMapping(params = {"title", "description"})
-    public List<ComicsDto> searchByTitleAndDescription(@RequestParam String title, @RequestParam String description) {
-        return Stream.concat(service.findByName(title).stream(), service.findByDescription(description).stream())
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping("/:{id}")
     public ComicsDto getById(@PathVariable UUID id) {
         return service.getByIdWithoutCollection(id);
     }
 
-    @GetMapping("/{id}/characters")
+    @GetMapping("/:{id}/characters")
     public ComicsDtoWithCharacters getCharacters(@PathVariable UUID id) {
         return service.getByIdWithCollection(id);
     }
 
-    @DeleteMapping("/remove/comics/{id}")
+    @DeleteMapping("/remove/comics/:{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeById(@PathVariable UUID id) {
         service.removeById(id);
     }

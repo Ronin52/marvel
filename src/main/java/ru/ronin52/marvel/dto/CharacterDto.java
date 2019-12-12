@@ -7,6 +7,7 @@ import ru.ronin52.marvel.entity.CharacterEntity;
 
 import java.util.UUID;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,10 +19,10 @@ public class CharacterDto {
 
     public static CharacterDto from(CharacterEntity entity) {
         return new CharacterDto(
-          entity.getId(),
-          entity.getName(),
-          entity.getDescription(),
-          entity.getImage()
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getImage()
         );
     }
 }

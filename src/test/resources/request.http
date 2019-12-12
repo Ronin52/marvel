@@ -1,52 +1,48 @@
 ###
-POST http://localhost:9999/characters/save
+GET http://localhost:8080/characters/:90f75bf5-272c-4d94-90d0-e1b2e6edefd6/comics
+
+###
+POST http://localhost:8080/characters/save
 Content-Type:application/json
 
 {
-  "name": "three",
+  "id": "90f75bf5-272c-4d94-90d0-e1b2e6edefd6",
+  "name": "updated",
   "description": "cast",
-  "image": ""
+  "image": "",
+  "comics": [
+    {
+      "id": "f52b478d-3bb1-4afb-9af5-d60ebeefaa1a",
+      "title": "",
+      "description": "",
+      "image": ""
+    }
+  ]
 }
 
 ###
-POST http://localhost:9999/comics/save
+POST http://localhost:8080/comics/save
 Content-Type:application/json
 
 {
+  "id": "",
   "title": "",
   "description": "",
-  "image": ""
+  "image": "",
+  "characters": []
 }
-
 ###
-GET http://localhost:9999/characters/search?name=&description=a
-
-###
-GET http://localhost:9999/characters/:3364df8b-3cc5-4ecf-ace0-e9725d970481/comics
-###
-
-GET http://localhost:9999/characters?page=1&count=1
-
-###
-POST http://localhost:9999/characters/bind/84bcff5e-2899-49a9-9190-7b018d861282
+POST http://localhost:8080/characters/bind/:90f75bf5-272c-4d94-90d0-e1b2e6edefd6
 Content-Type:application/json
 
 [
   {
-    "id": "f3b01035-f3ec-4740-bdd8-8e086ea2e239",
+    "id": "f52b478d-3bb1-4afb-9af5-d60ebeefaa1a",
     "title": "",
     "description": "",
-    "image": ""
-  },
-  {
-    "id": "791e0f8d-075c-422f-bba1-ab5c024fac55",
-    "title": "",
-    "description": "",
-    "image": ""
+    "image": "",
+    "characters": []
   }
 ]
-
-###
-DELETE http://localhost:9999/comics/remove/f3b01035-f3ec-4740-bdd8-8e086ea2e239
 
 ###

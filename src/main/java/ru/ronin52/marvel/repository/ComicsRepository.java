@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ComicsRepository extends JpaRepository<ComicsEntity, UUID> {
+    boolean existsById(UUID id);
+
     List<ComicsEntity> findAllByTitleContainsIgnoreCase(String q);
 
     List<ComicsEntity> findAllByDescriptionContainsIgnoreCase(String q);

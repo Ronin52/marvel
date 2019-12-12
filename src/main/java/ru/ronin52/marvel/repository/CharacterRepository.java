@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CharacterRepository extends JpaRepository<CharacterEntity, UUID> {
+    boolean existsById(UUID id);
+
     List<CharacterEntity> findAllByNameContainsIgnoreCase(String q);
 
     List<CharacterEntity> findAllByDescriptionContainsIgnoreCase(String q);

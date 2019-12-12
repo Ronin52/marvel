@@ -2,16 +2,15 @@ package ru.ronin52.marvel.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.ronin52.marvel.dto.CharacterDto;
 import ru.ronin52.marvel.dto.ComicsDto;
 import ru.ronin52.marvel.dto.ComicsDtoWithCharacters;
-import ru.ronin52.marvel.dto.ComicsSaveDto;
 import ru.ronin52.marvel.entity.ComicsEntity;
 import ru.ronin52.marvel.exception.ComicsNotFoundException;
 import ru.ronin52.marvel.repository.ComicsRepository;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.awt.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,23 +20,71 @@ import static org.mockito.Mockito.when;
 
 class ComicsServiceImplTest {
     private ComicsRepository repository;
-    private EntityService<ComicsDto, ComicsDtoWithCharacters, ComicsSaveDto> service;
+    private RelationService relationService;
+    private EntityService<ComicsDto, ComicsDtoWithCharacters> service;
 
     @BeforeEach
     void init() {
         repository = mock(ComicsRepository.class);
-        service = new ComicsServiceImpl(repository);
+        relationService = mock(RelationServiceImpl.class);
+        service = new ComicsServiceImpl(repository, relationService);
+    }
+
+    @Test
+    void createCharacterWithEmptyCharactersList() {
+        UUID id = UUID.randomUUID();
+
+        ComicsEntity entity = new ComicsEntity();
+        entity.setId(id);
+        entity.setCharacters(Collections.emptyList());
+
+        ComicsDtoWithCharacters dto = new ComicsDtoWithCharacters();
+        dto.setCharacters(Collections.emptyList());
+
+        when(repository.save(any(ComicsEntity.class)))
+                .thenReturn(entity);
+
+        assertEquals(id, service.save(dto).getId());
+    }
+
+    @Test
+    void createCharacterWithCharactersList() {
+        UUID id = UUID.randomUUID();
+
+        ComicsEntity entity = new ComicsEntity();
+        entity.setId(id);
+        entity.setCharacters(Collections.emptyList());
+
+        ArrayList<CharacterDto> characterDtoArrayList = new ArrayList<>();
+        characterDtoArrayList.add(new CharacterDto());
+
+        ComicsDtoWithCharacters dto = new ComicsDtoWithCharacters();
+        dto.setCharacters(characterDtoArrayList);
+
+        when(repository.save(any(ComicsEntity.class)))
+                .thenReturn(entity);
+        when(relationService.bindCharacterAndComicsById(any(UUID.class),any(UUID.class)))
+                .thenReturn(true);
+
+        assertEquals(id, service.save(dto).getId());
     }
 
     @Test
     void save() {
         UUID id = UUID.randomUUID();
+
         ComicsEntity entity = new ComicsEntity();
         entity.setId(id);
+        entity.setCharacters(Collections.emptyList());
+
+        ComicsDtoWithCharacters dto = new ComicsDtoWithCharacters();
+        dto.setId(id);
+        dto.setCharacters(Collections.emptyList());
+
         when(repository.save(any(ComicsEntity.class)))
                 .thenReturn(entity);
 
-        assertEquals(id, service.save(new ComicsSaveDto()).getId());
+        assertEquals(id, service.save(dto).getId());
     }
 
     @Test

@@ -3,8 +3,8 @@ package ru.ronin52.marvel.service;
 import java.util.List;
 import java.util.UUID;
 
-public interface EntityService <D, C, S> {
-    D save(S dto);
+public interface EntityService <D, C> {
+    C save(C dto);
     List<D> getPage(int page, int count);
     List<D> getSortedByName();
     List<D> findByName(String q);

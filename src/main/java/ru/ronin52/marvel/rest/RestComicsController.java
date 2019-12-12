@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.ronin52.marvel.dto.CharacterDto;
 import ru.ronin52.marvel.dto.ComicsDto;
 import ru.ronin52.marvel.dto.ComicsDtoWithCharacters;
-import ru.ronin52.marvel.dto.ComicsSaveDto;
 import ru.ronin52.marvel.service.EntityService;
 import ru.ronin52.marvel.service.RelationService;
 
@@ -19,19 +18,19 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @RequestMapping("/comics")
 public class RestComicsController {
-    private final EntityService<ComicsDto, ComicsDtoWithCharacters, ComicsSaveDto> service;
+    private final EntityService<ComicsDto, ComicsDtoWithCharacters> service;
     private final RelationService relationService;
 
-    @PostMapping("/save/comics")
+    @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public ComicsDto save(@RequestBody ComicsSaveDto dto) {
-        return service.save(dto);
+    public ComicsDtoWithCharacters save(@RequestBody ComicsDtoWithCharacters comicsDtoWithCharacters) {
+        return service.save(comicsDtoWithCharacters);
     }
 
     @PostMapping("/bind/:{comicsId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void bindCharacters(@PathVariable UUID comicsId, @RequestBody List<CharacterDto> dtoList) {
-        for (CharacterDto dto : dtoList) {
+    public void bindCharacters(@PathVariable UUID comicsId, @RequestBody List<CharacterDto> characterDtoList) {
+        for (CharacterDto dto : characterDtoList) {
             relationService.bindCharacterAndComicsById(dto.getId(), comicsId);
         }
     }

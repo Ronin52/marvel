@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.ronin52.marvel.dto.CharacterDto;
 import ru.ronin52.marvel.dto.CharacterDtoWithComics;
-import ru.ronin52.marvel.dto.CharacterSaveDto;
+import ru.ronin52.marvel.dto.ComicsDto;
 import ru.ronin52.marvel.entity.CharacterEntity;
 import ru.ronin52.marvel.exception.CharacterNotFoundException;
 import ru.ronin52.marvel.repository.CharacterRepository;
@@ -15,12 +15,23 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CharacterServiceImpl implements EntityService<CharacterDto, CharacterDtoWithComics, CharacterSaveDto> {
+public class CharacterServiceImpl implements EntityService<CharacterDto, CharacterDtoWithComics> {
     private final CharacterRepository repository;
+    private final RelationService relationService;
 
     @Override
-    public CharacterDto save(CharacterSaveDto dto) {
-        return CharacterDto.from(repository.save(CharacterEntity.from(dto)));
+    public CharacterDtoWithComics save(CharacterDtoWithComics dto) {
+        if (dto.getId() == null) {
+            dto.setId(UUID.randomUUID());
+            CharacterDtoWithComics saved = CharacterDtoWithComics.from(repository.save(CharacterEntity.from(dto)));
+            if (!dto.getComics().isEmpty()) {
+                for (ComicsDto dtoComics : dto.getComics()) {
+                    relationService.bindCharacterAndComicsById(saved.getId(), dtoComics.getId());
+                }
+            }
+            return saved;
+        }
+        return CharacterDtoWithComics.from(repository.save(CharacterEntity.from(dto)));
     }
 
     @Override

@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import ru.ronin52.marvel.dto.CharacterSaveDto;
+import ru.ronin52.marvel.dto.CharacterDto;
+import ru.ronin52.marvel.dto.CharacterDtoWithComics;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @EqualsAndHashCode(exclude = "comics")
@@ -30,13 +32,31 @@ public class CharacterEntity {
             inverseJoinColumns = @JoinColumn(name = "comics_id"))
     private Collection<ComicsEntity> comics;
 
-    public static CharacterEntity from(CharacterSaveDto dto) {
+    public CharacterEntity(UUID id, String name, String description, String image) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+    }
+
+    public static CharacterEntity from(CharacterDto dto) {
         return new CharacterEntity(
-                UUID.randomUUID(),
+                dto.getId(),
+                dto.getName(),
+                dto.getDescription(),
+                dto.getImage()
+        );
+    }
+
+    public static CharacterEntity from(CharacterDtoWithComics dto) {
+        return new CharacterEntity(
+                dto.getId(),
                 dto.getName(),
                 dto.getDescription(),
                 dto.getImage(),
-                Collections.emptyList()
+                dto.getComics().stream()
+                        .map(ComicsEntity::from)
+                        .collect(Collectors.toList())
         );
     }
 }

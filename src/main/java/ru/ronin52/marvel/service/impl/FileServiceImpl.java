@@ -22,8 +22,29 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
     private final String uploadPath;
 
-    private static final String FILE_CONTENT_TYPE_JPEG = "image/jpeg";
-    private static final String FILE_CONTENT_TYPE_PNG = "image/png";
+    private enum FILE_CONTENT_TYPE {
+        JPEG("image/jpeg"),
+        PNG("image/png");
+
+        private String name;
+
+        FILE_CONTENT_TYPE(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static FILE_CONTENT_TYPE getType(String typeName) {
+            for (FILE_CONTENT_TYPE value : FILE_CONTENT_TYPE.values()) {
+                if(value.getName().equals(typeName)){
+                    return value;
+                }
+            }
+            throw new UnsupportedFileTypeException(typeName);
+        }
+    }
 
     private static final String EXTENSION_JPEG = ".jpg";
     private static final String EXTENSION_PNG = ".png";
@@ -47,11 +68,11 @@ public class FileServiceImpl implements FileService {
         if (contentType == null) {
             throw new ContentTypeIsNullException();
         }
-        switch (contentType) {
-            case FILE_CONTENT_TYPE_JPEG:
+        switch (FILE_CONTENT_TYPE.getType(contentType)) {
+            case JPEG:
                 name = UUID.randomUUID() + EXTENSION_JPEG;
                 break;
-            case FILE_CONTENT_TYPE_PNG:
+            case PNG:
                 name = UUID.randomUUID() + EXTENSION_PNG;
                 break;
             default:
